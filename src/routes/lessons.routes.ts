@@ -1,15 +1,15 @@
-// import useAuthentication from '../middlewares/useAuthentication';
-// import { Router } from 'express';
-// import LessonsController from '../controllers/LessonsController';
+import useAuthentication from '../middlewares/useAuthentication';
+import { Router } from 'express';
+import LessonsController from '../controllers/LessonsController';
 
-// const lessonsRouter = Router();
+const lessonsRouter = Router();
 
-// lessonsRouter.use(useAuthentication);
+lessonsRouter.use(useAuthentication);
 
-// const lessonsController = new LessonsController();
+lessonsRouter.post('/', LessonsController.create);
 
-// lessonsRouter.post('/', lessonsController.create);
+lessonsRouter.put('/:id', LessonsController.update);
 
-// lessonsRouter.put('/:lesson_id', lessonsController.update);
+lessonsRouter.delete('/:id', LessonsController.delete);
 
-// export default lessonsRouter;
+export default lessonsRouter;

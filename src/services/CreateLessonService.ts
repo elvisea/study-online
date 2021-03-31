@@ -37,17 +37,17 @@
 //     });
 
 //     if (findLesson) {
-//       throw new AppError('This course already has a lesson with this name.');
+//       throw new AppError('Este curso já tem uma aula com este nome.');
 //     }
 
 //     const course = await this.coursesRepository.findById(course_id);
 
 //     if (!course) {
-//       throw new AppError('Course not found.');
+//       throw new AppError('Curso não encontrado.');
 //     }
 
 //     if (course.user_id !== user_id) {
-//       throw new AppError('This course is not owned by the authenticated user.');
+//       throw new AppError('Este curso não pertence ao usuário autenticado.');
 //     }
 
 //     const lesson = await this.lessonsRepository.create({

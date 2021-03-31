@@ -7,16 +7,6 @@ import User from '../models/User';
 import authConfig from '../config/auth';
 import AppError from '../errors/AppError';
 
-// interface IRequest {
-//   email: string;
-//   password: string;
-// }
-
-// interface IResponse {
-//   user: User;
-//   token: string;
-// }
-
 export default {
   async create(request: Request, response: Response): Promise<Response> {
     const { email, password } = request.body;
@@ -26,7 +16,7 @@ export default {
     const user = await usersRepository.findOne({where: { email }})
 
     if (!user) {
-      throw new AppError('E-mail not registered.', 401);
+      throw new AppError('E-mail nao registrado.', 401);
     }
 
     const passwordMatched = await compare(password, user.password);

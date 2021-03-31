@@ -16,7 +16,6 @@ export default class CreateCourses1605383701892 implements MigrationInterface {
           {
             name: 'user_id',
             type: 'uuid',
-            isNullable: true,
           },
           {
             name: 'name',

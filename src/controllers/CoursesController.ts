@@ -1,69 +1,105 @@
-// import CreateCourseService from '@modules/courses/services/CreateCourseService';
-// import DeleteCourseService from '@modules/courses/services/DeleteCourseService';
-// import ListCourseLessonsService from '@modules/courses/services/ListCourseLessonsService';
-// import ListCoursesService from '@modules/courses/services/ListCoursesService';
-// import UpdateCourseService from '@modules/courses/services/UpdateCourseService';
-// import { Request, Response } from 'express';
-// import { container } from 'tsyringe';
+import AppError from 'errors/AppError';
+import { Request, Response } from 'express';
+import Course from 'models/Course';
+import { getRepository } from 'typeorm';
 
-// export default class CoursesController {
-//   public async show(request: Request, response: Response): Promise<Response> {
-//     const listCourses = container.resolve(ListCoursesService);
+export default {
+  //Listar Cursos OK
+  async show(request: Request, response: Response): Promise<Response> {
+    const user_id = request.user.id;
 
-//     const courses = await listCourses.execute();
+    const courseRepository = getRepository(Course)
 
-//     return response.json(courses);
-//   }
+    const courses = await courseRepository.find({ where: { user_id: user_id } });
 
-//   public async index(request: Request, response: Response): Promise<Response> {
-//     const { course_id } = request.params;
+    return response.json(courses);
+  },
 
-//     const listCourseLessons = container.resolve(ListCourseLessonsService);
+  //Listar Um Curso OK
+  async index(request: Request, response: Response): Promise<Response> {
+    const { id } = request.params;
+    const user_id = request.user.id;
 
-//     const lessons = await listCourseLessons.execute(course_id);
+    const courseRepository = getRepository(Course)
 
-//     return response.json(lessons);
-//   }
+    const course = await courseRepository.findOne(id);
 
-//   public async create(request: Request, response: Response): Promise<Response> {
-//     const { name, image, description } = request.body;
-//     const user_id = request.user.id;
+    if (!course) {
+      throw new AppError('Curso não encontrado.');
+    }
 
-//     const createCourse = container.resolve(CreateCourseService);
+    if (course.user_id !== user_id) {
+      throw new AppError('Este curso não pertence ao usuário autenticado.');
+    }
 
-//     const course = await createCourse.execute({ user_id, name, image, description });
+    return response.json(course);
+  },
 
-//     return response.json(course);
-//   }
+  //Criar Curso OK
+  async create(request: Request, response: Response): Promise<Response> {
+    const { name, image, description } = request.body;
+    const user_id = request.user.id;
 
-//   public async update(request: Request, response: Response): Promise<Response> {
-//     const { course_id } = request.params;
-//     const user_id = request.user.id;
-//     const { name, image, description } = request.body;
+    const courseRepository = getRepository(Course)
 
-//     const updateCourse = container.resolve(UpdateCourseService);
+    const course = courseRepository.create({
+      user_id,
+      name,
+      image,
+      description,
+    });
 
-//     const course = await updateCourse.execute({
-//       course_id,
-//       user_id,
-//       name,
-//       description,
-//       image,
-//     });
+    await courseRepository.save(course)
 
-//     return response.json(course);
-//   }
+    return response.json(course);
+  },
 
-//   public async delete(request: Request, response: Response): Promise<Response> {
-//     const { id } = request.params;
-//     const user_id = request.user.id;
+  //Atualizar Curso OK
+  async update(request: Request, response: Response): Promise<Response> {
+    const { id } = request.params;
+    const user_id = request.user.id;
+    const { name, image, description } = request.body;
 
-//     const deleteCourse = container.resolve(DeleteCourseService);
+    const courseRepository = getRepository(Course)
 
-//     await deleteCourse.execute({
-//       id,
-//     });
+    const course = await courseRepository.findOne(id);
 
-//     return response.json({message: "Excluido"});
-//   }
-// }
+    if (!course) {
+      throw new AppError('Curso não encontrado.');
+    }
+
+    if (course.user_id !== user_id) {
+      throw new AppError('Este curso não pertence ao usuário autenticado.');
+    }
+
+    course.name = name || course.name;
+    course.image = image || course.image;
+    course.description = description || course.description;
+
+    await courseRepository.save(course)
+
+    return response.json(course);
+  },
+
+  //Deletar Curso OK
+  async delete(request: Request, response: Response): Promise<Response> {
+    const { id } = request.params;
+    const user_id = request.user.id;
+
+    const courseRepository = getRepository(Course)
+
+    const course = await courseRepository.findOne(id);
+
+    if (!course) {
+      throw new AppError('Curso não encontrado.');
+    }
+
+    if (course.user_id !== user_id) {
+      throw new AppError('Este curso não pertence ao usuário autenticado.');
+    }
+
+    await courseRepository.delete(id);
+
+    return response.json({message: "Curso Excluido"});
+  }
+}
