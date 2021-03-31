@@ -101,5 +101,22 @@ export default {
     await courseRepository.delete(id);
 
     return response.json({message: "Curso Excluido"});
-  }
+  },
+
+    // Listar Aulas de um Curso OK
+    async listLessons(request: Request, response: Response): Promise<Response> {
+      const { id } = request.params;
+
+      const courseRepository = getRepository(Course)
+
+      const course = await courseRepository.findOne(id);
+      
+      if (!course) {
+        throw new AppError('Curso não encontrado.');
+      }
+  
+      const { lessons } = course;
+  
+      return response.json(lessons);
+    },
 }

@@ -1,19 +1,19 @@
-import { inject, injectable } from 'tsyringe';
-import Course from '../infra/typeorm/entities/Course';
-import ICoursesRepository from '../repositories/ICoursesRepository';
+// import { inject, injectable } from 'tsyringe';
+// // import Course from '../infra/typeorm/entities/Course';
+// // import ICoursesRepository from '../repositories/ICoursesRepository';
 
-@injectable()
-class ListCoursesService {
-  constructor(
-    @inject('CoursesRepository')
-    private coursesRepositoru: ICoursesRepository,
-  ) {}
+// @injectable()
+// class ListCoursesService {
+//   constructor(
+//     @inject('CoursesRepository')
+//     private coursesRepositoru: ICoursesRepository,
+//   ) {}
 
-  public async execute(): Promise<Course[]> {
-    const courses = this.coursesRepositoru.findAll();
+//   public async execute(): Promise<Course[]> {
+//     const courses = this.coursesRepositoru.findAll();
 
-    return courses;
-  }
-}
+//     return courses;
+//   }
+// }
 
-export default ListCoursesService;
+// export default ListCoursesService;

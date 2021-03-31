@@ -8,14 +8,11 @@ const coursesRouter = Router();
 
 coursesRouter.use(useAuthentication);
 
-//Listar todos os Cursos de um usuario
-coursesRouter.get('/', CoursesController.show);
+coursesRouter.get('/all', CoursesController.show);
 
-//Listar um Curso de um usuario
 coursesRouter.get('/:id', CoursesController.index);
 
-// //Listar aulas por Cursos
-// coursesRouter.get('/:course_id/lessons', coursesController.index);
+coursesRouter.get('/:id/lessons', CoursesController.listLessons);
 
 //Deletar Curso
 coursesRouter.delete('/:id', CoursesController.delete);

@@ -10,7 +10,7 @@ const routes = Router();
 routes.use('/users', usersRouter);
 routes.use('/sessions', sessionsRouter);
 routes.use('/profile', profileRouter);
-routes.use('/courses', coursesRouter);
+routes.use('/course', coursesRouter);
 routes.use('/lessons', lessonsRouter);
 
 export default routes;

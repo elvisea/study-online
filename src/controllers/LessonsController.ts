@@ -48,6 +48,7 @@ export default {
 
     return response.json(lesson);
   },
+
   // Atualizar Aula Não OK
   async update(request: Request, response: Response): Promise<Response> {
     const { lesson_id } = request.params;
